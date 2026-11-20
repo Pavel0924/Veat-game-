@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Veat Game – Panel admin</title>
+<style>
+:root{--bg:#f4f5fb;--card:#fff;--tx:#1b1d2a;--mut:#6b6f85;--ac:#6c5ce7;--bd:#e2e4f0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12131c;--card:#1c1e2b;--tx:#eceef8;--mut:#9a9eb8;--bd:#2c2f42;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12131c;--card:#1c1e2b;--tx:#eceef8;--mut:#9a9eb8;--bd:#2c2f42;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.hidden{display:none!important}
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.box{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:28px;width:100%;max-width:360px}
+.box h1{margin:0 0 4px;font-size:22px}
+.box p{margin:0 0 18px;color:var(--mut);font-size:14px}
+input{width:100%;padding:12px;margin-bottom:12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font-size:16px}
+button{cursor:pointer;font:inherit}
+.btn{width:100%;padding:12px;border:0;border-radius:10px;background:var(--ac);color:#fff;font-weight:600}
+#err{color:#e55;font-size:14px;min-height:20px;margin-top:8px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--bd)}
+#burger{background:none;border:0;color:var(--tx);font-size:26px;line-height:1;padding:4px 8px}
+header h2{margin:0;font-size:18px}
+#menu{position:fixed;top:0;left:0;bottom:0;width:260px;max-width:80%;background:var(--card);border-right:1px solid var(--bd);z-index:40;transform:translateX(-100%);transition:transform .3s;padding:calc(20px + env(safe-area-inset-top,0px)) 14px 20px}
+#menu.open{transform:none}
+#veil{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .3s;z-index:30}
+#veil.open{opacity:1;pointer-events:auto}
+#menu h3{margin:0 0 16px 8px;font-size:18px}
+.nav{display:block;width:100%;text-align:left;background:none;border:0;color:var(--tx);padding:12px;border-radius:10px;margin-bottom:4px;font-size:16px}
+.nav.active{background:var(--ac);color:#fff}
+.out{color:#e55}
+main{padding:16px;max-width:760px;margin:0 auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px}
+.card small{color:var(--mut);display:block;margin-bottom:6px}
+.card .n{font-size:30px;font-weight:700;width:100%;margin:0;padding:4px 0;border:0;background:none;color:var(--tx)}
+.card a{color:var(--ac);font-size:13px;word-break:break-all}
+h1.t{font-size:22px;margin:4px 0 14px}
+.note{color:var(--mut);font-size:13px;margin-top:14px}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="box">
+    <h1>🎮 Veat Game</h1>
+    <p>Connexion administrateur</p>
+    <input id="u" placeholder="Identifiant" autocomplete="username" autocapitalize="off">
+    <input id="p" type="password" placeholder="Mot de passe" autocomplete="current-password">
+    <button class="btn" id="go">Se connecter</button>
+    <div id="err"></div>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+  <header><button id="burger" aria-label="Menu">☰</button><h2 id="title">Accueil</h2></header>
+  <div id="veil"></div>
+  <nav id="menu">
+    <h3>Veat Game</h3>
+    <button class="nav active" data-p="home">🏠 Page d’accueil</button>
+    <button class="nav" data-p="net">🌐 Réseaux</button>
+    <button class="nav" data-p="stats">📊 Statistiques</button>
+    <button class="nav out" id="logout">⎋ Déconnexion</button>
+  </nav>
+
+  <main>
+    <section id="home" class="page">
+      <h1 class="t">Vue générale</h1>
+      <div class="grid">
+        <div class="card"><small>▶️ YouTube – abonnés</small><input class="n" data-k="yt" inputmode="numeric" value="0"></div>
+        <div class="card"><small>𝕏 – abonnés</small><input class="n" data-k="x" inputmode="numeric" value="0"></div>
+        <div class="card"><small>🎵 TikTok – abonnés</small><input class="n" data-k="tt" inputmode="numeric" value="0"></div>
+        <div class="card"><small>🕹️ Nombre de joueurs</small><input class="n" data-k="players" inputmode="numeric" value="0"></div>
+      </div>
+      <p class="note">Touche un chiffre pour le modifier ; il est enregistré sur cet appareil.</p>
+    </section>
+
+    <section id="net" class="page hidden">
+      <h1 class="t">Réseaux</h1>
+      <div class="grid">
+        <div class="card"><small>▶️ YouTube</small><div class="n" data-v="yt">0</div><p><a href="https://youtube.com/@veatgame?si=0vVY0tdRCxE9xMsz" target="_blank" rel="noopener">youtube.com/@veatgame</a></p></div>
+        <div class="card"><small>𝕏 (Twitter)</small><div class="n" data-v="x">0</div><p><a href="https://x.com/veatgames?s=11" target="_blank" rel="noopener">x.com/veatgames</a></p></div>
+        <div class="card"><small>🎵 TikTok</small><div class="n" data-v="tt">0</div><p><a href="https://www.tiktok.com/@veat.game" target="_blank" rel="noopener">@veat.game</a></p></div>
+      </div>
+    </section>
+
+    <section id="stats" class="page hidden">
+      <h1 class="t">Statistiques du jeu</h1>
+      <div class="grid">
+        <div class="card"><small>🛒 Nombre d’acheteurs</small><input class="n" data-k="buyers" inputmode="numeric" value="0"></div>
+        <div class="card"><small>🟢 Joueurs actifs</small><input class="n" data-k="active" inputmode="numeric" value="0"></div>
+        <div class="card"><small>✨ Cosmétiques en circulation</small><input class="n" data-k="cosm" inputmode="numeric" value="0"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+// SHA-256 de l’identifiant et du mot de passe (le mot de passe n’apparaît pas en clair dans le code)
+const HU="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
+const HP="33028afb6477ffd042496ab15ae4957d9c1feb78c905a9aeaeb3500b8262584c";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+async function sha(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+let data={};
+try{data=JSON.parse(localStorage.getItem("veat")||"{}")}catch(e){}
+function save(){try{localStorage.setItem("veat",JSON.stringify(data))}catch(e){}}
+function sync(){
+  $$("[data-k]").forEach(i=>{i.value=data[i.dataset.k]??"0"});
+  $$("[data-v]").forEach(d=>{d.textContent=data[d.dataset.v]??"0"});
+}
+$$("[data-k]").forEach(i=>i.addEventListener("input",()=>{data[i.dataset.k]=i.value.replace(/[^\d]/g,"")||"0";save();sync()}));
+async function login(){
+  const ok=(await sha($("#u").value.trim()))===HU && (await sha($("#p").value))===HP;
+  if(ok){$("#login").classList.add("hidden");$("#app").classList.remove("hidden");sync();$("#p").value=""}
+  else{$("#err").textContent="Identifiant ou mot de passe incorrect."}
+}
+$("#go").onclick=login;
+$("#p").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
+function toggle(o){$("#menu").classList.toggle("open",o);$("#veil").classList.toggle("open",o)}
+$("#burger").onclick=()=>toggle(!$("#menu").classList.contains("open"));
+$("#veil").onclick=()=>toggle(false);
+$$(".nav[data-p]").forEach(b=>b.onclick=()=>{
+  $$(".page").forEach(p=>p.classList.add("hidden"));$("#"+b.dataset.p).classList.remove("hidden");
+  $$(".nav").forEach(n=>n.classList.remove("active"));b.classList.add("active");
+  $("#title").textContent=b.textContent.replace(/^\S+\s/,"");toggle(false);
+});
+$("#logout").onclick=()=>{toggle(false);$("#app").classList.add("hidden");$("#login").classList.remove("hidden");$("#err").textContent="";$("#u").value=""};
+</script>
+</body>
+</html>
